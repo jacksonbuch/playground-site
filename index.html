@@ -1,378 +1,756 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Playground — Arcade Pack</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Playground — Arcade Pack (Pro)</title>
 <style>
-  /* === GLOBAL STYLES === */
-  body {
-    margin: 0;
-    font-family: "Orbitron", Arial, sans-serif;
-    background: radial-gradient(circle at top left, #0b0c10, #111418 60%, #0b0c10);
-    color: #e8e8e8;
-    display: flex;
-    height: 100vh;
-    overflow: hidden;
-  }
-  * { box-sizing: border-box; }
-  h1, h2, h3 { margin: 0; }
+/* ===== Tech Futuristic — polished UI ===== */
+:root{
+  --bg:#0a0b0d;
+  --panel:#0f1416;
+  --muted: #9aa6ad;
+  --accent1:#00e5ff; /* cyan */
+  --accent2:#ff2a2a; /* red */
+  --glass: rgba(255,255,255,0.03);
+  --card:#0b0f11;
+  --radius:12px;
+}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;background:
+  radial-gradient(1200px 600px at 10% 10%, rgba(0,229,255,0.03), transparent 8%),
+  radial-gradient(800px 400px at 90% 90%, rgba(255,42,42,0.03), transparent 6%),
+  var(--bg); color:#e6eef2;-webkit-font-smoothing:antialiased}
+.app{
+  display:grid; grid-template-columns:280px 1fr; gap:18px; height:100vh; padding:22px;
+  align-items:stretch;
+}
+.sidebar{
+  background:linear-gradient(180deg,#0e1113,#08090a);
+  border-radius:var(--radius); padding:18px; border:1px solid rgba(255,255,255,0.04);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
+  display:flex; flex-direction:column;
+}
+.brand{display:flex;flex-direction:row;gap:12px;align-items:center;margin-bottom:14px}
+.logo{
+  width:54px;height:54px;border-radius:10px;
+  background:linear-gradient(135deg,var(--accent2),#ff8a8a);
+  display:flex;align-items:center;justify-content:center;font-weight:900;color:#071426;
+  box-shadow:0 10px 30px rgba(255,42,42,0.08)
+}
+.title{font-size:18px;font-weight:700}
+.subtitle{font-size:12px;color:var(--muted);margin-top:4px}
+.search{
+  margin:10px 0; display:flex; gap:8px; align-items:center;
+}
+.search input{flex:1;padding:10px;border-radius:10px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:inherit}
+.sectionTitle{font-size:12px;color:var(--muted);margin-top:12px;margin-bottom:8px}
+.gamesList{display:flex;flex-direction:column;gap:8px;overflow:auto;padding-right:6px}
+.btn{
+  display:flex;align-items:center;gap:8px;padding:10px;border-radius:10px;border:1px solid transparent;background:linear-gradient(180deg,rgba(255,255,255,0.01),transparent);
+  cursor:pointer;color:inherit;font-weight:600;
+}
+.btn:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(0,0,0,0.5)}
+.btn.active{border:1px solid rgba(255,255,255,0.06);box-shadow:0 10px 40px rgba(0,0,0,0.6);background:linear-gradient(90deg, rgba(0,229,255,0.04), rgba(255,42,42,0.02))}
+.footerSmall{margin-top:auto;font-size:12px;color:var(--muted);text-align:center}
 
-  /* === SIDEBAR === */
-  #sidebar {
-    width: 250px;
-    background: linear-gradient(180deg, #1a1d22, #0d0e10);
-    border-right: 2px solid #ff2a2a;
-    display: flex;
-    flex-direction: column;
-    padding: 20px;
-    box-shadow: 4px 0 15px rgba(255, 40, 40, 0.2);
-  }
-  #logo {
-    font-size: 1.4em;
-    color: #ff2a2a;
-    text-shadow: 0 0 10px #ff2a2a;
-    text-align: center;
-    margin-bottom: 20px;
-    letter-spacing: 1px;
-  }
-  .nav-button {
-    background: none;
-    border: 1px solid #333;
-    color: #ccc;
-    margin: 6px 0;
-    padding: 10px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.2s;
-    font-size: 0.9em;
-    text-align: left;
-  }
-  .nav-button:hover {
-    background: #111;
-    color: #00ffff;
-    border-color: #00ffff;
-    box-shadow: 0 0 8px #00ffff55;
-  }
-  #content {
-    flex: 1;
-    padding: 20px;
-    overflow: auto;
-    position: relative;
-  }
+/* main content */
+.content{
+  display:flex;flex-direction:column;gap:12px;
+}
+.header{
+  display:flex;justify-content:space-between;align-items:center;gap:12px;
+}
+.hLeft{display:flex;flex-direction:column}
+.hTitle{font-size:20px;color:var(--accent1);text-shadow:0 4px 18px rgba(0,229,255,0.06);font-weight:800}
+.hSub{font-size:12px;color:var(--muted)}
+.panel{
+  background:linear-gradient(180deg,var(--card),#091012);
+  border-radius:12px;padding:14px;border:1px solid rgba(255,255,255,0.03);box-shadow:0 8px 30px rgba(0,0,0,0.6);
+  min-height:280px;
+}
+.toolbar{display:flex;gap:8px;align-items:center}
+.kv{font-size:13px;color:var(--muted);padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.01);border:1px solid rgba(255,255,255,0.02)}
 
-  canvas, .game-area {
-    background: #0f1012;
-    border: 2px solid #333;
-    box-shadow: 0 0 20px rgba(0,255,255,0.2);
-    margin-top: 10px;
-  }
-  button, input {
-    font-family: inherit;
-  }
-  #gameTitle {
-    font-size: 1.5em;
-    color: #00ffff;
-    text-shadow: 0 0 8px #00ffff;
-  }
+.gridTwo{display:grid;grid-template-columns:1fr 420px;gap:14px;align-items:start}
 
-  /* === RESPONSIVE === */
-  @media (max-width: 800px) {
-    #sidebar { width: 160px; font-size: 0.8em; }
-  }
+/* gameStage (where games load) */
+.stage{border-radius:10px;border:1px solid rgba(255,255,255,0.03);padding:12px;background:linear-gradient(180deg,#071214,#0b1416)}
+.stageHeader{display:flex;justify-content:space-between;align-items:center}
+.stageTitle{font-weight:800;color:#cfeff6}
+.stageBody{margin-top:10px;display:flex;gap:12px;align-items:center;justify-content:center;min-height:320px}
+
+/* cards */
+.card{background:linear-gradient(180deg,#0c1113,#091012);border-radius:10px;padding:12px;border:1px solid rgba(255,255,255,0.02)}
+
+/* responsive */
+@media (max-width:980px){
+  .app{grid-template-columns: 1fr; padding:12px; height:auto}
+  .sidebar{order:2;display:flex;flex-direction:row;gap:8px;overflow:auto;height:64px;padding:8px}
+  .brand{display:none}
+  .gridTwo{grid-template-columns:1fr}
+  .stageBody{min-height:420px}
+}
+
+/* small game-specific niceties */
+canvas{display:block;border-radius:8px;background:#000}
+.smallMuted{font-size:12px;color:var(--muted)}
+.center{display:flex;align-items:center;justify-content:center;flex-direction:column}
+.badge{display:inline-block;padding:6px 10px;border-radius:999px;background:linear-gradient(90deg,var(--accent1),var(--accent2)); color:#071426;font-weight:800}
 </style>
 </head>
 <body>
-  <div id="sidebar">
-    <div id="logo">Playground — Arcade Pack</div>
-    <button class="nav-button" onclick="loadGame('aim')">Aim Trainer</button>
-    <button class="nav-button" onclick="loadGame('guess')">Number Guess</button>
-    <button class="nav-button" onclick="loadGame('breakout')">Brick Breaker</button>
-    <button class="nav-button" onclick="loadGame('asteroid')">Asteroid Dodger</button>
-    <button class="nav-button" onclick="loadGame('2048')">2048</button>
-    <button class="nav-button" onclick="loadGame('tictactoe')">Tic Tac Toe</button>
-    <button class="nav-button" onclick="loadGame('memory')">Memory Match</button>
-    <button class="nav-button" onclick="loadGame('reaction')">Reaction Timer</button>
-    <button class="nav-button" onclick="loadGame('snake')">Snake</button>
-  </div>
-  <div id="content">
-    <div id="gameTitle">Welcome</div>
-    <div id="gameArea" class="game-area">
-      <p>Select a game from the sidebar to begin.</p>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="logo">P</div>
+      <div>
+        <div class="title">Playground — Arcade Pack</div>
+        <div class="subtitle">Tech Futuristic — Silent</div>
+      </div>
     </div>
-  </div>
+
+    <div class="search">
+      <input id="searchGames" placeholder="Search games..." />
+      <div class="kv smallMuted">v2.0</div>
+    </div>
+
+    <div class="sectionTitle">Games</div>
+    <div id="gamesList" class="gamesList">
+      <!-- buttons injected by JS for easy ordering -->
+    </div>
+
+    <div class="sectionTitle">Quick Tools</div>
+    <button class="btn" id="btnScores" onclick="showScores()">Leaderboard</button>
+    <button class="btn" id="btnSettings" onclick="openSettings()">Settings</button>
+
+    <div class="footerSmall">Open from a file — works offline</div>
+  </aside>
+
+  <main class="content">
+    <div class="header">
+      <div class="hLeft">
+        <div class="hTitle" id="mainTitle">Welcome to Playground — Arcade Pack</div>
+        <div class="hSub">Select a game to launch. Games are single-file, offline, and optimized for fun.</div>
+      </div>
+      <div class="toolbar">
+        <div class="kv" id="statusBadge">Ready</div>
+      </div>
+    </div>
+
+    <div class="gridTwo">
+      <div class="panel stage" id="stage">
+        <div class="stageHeader">
+          <div class="stageTitle" id="stageTitle">Pick a game</div>
+          <div class="smallMuted">No sound • Local scores saved</div>
+        </div>
+        <div class="stageBody" id="stageBody">
+          <div class="center">
+            <div style="font-size:28px;color:var(--accent2);font-weight:800">🕹️</div>
+            <div style="margin-top:8px" class="smallMuted">Choose a game on the left to start.</div>
+          </div>
+        </div>
+      </div>
+
+      <div style="min-width:300px">
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div style="font-weight:800">Leaderboard</div>
+            <div class="smallMuted">Top local scores</div>
+          </div>
+          <div id="leaderboard" style="margin-top:10px"></div>
+        </div>
+
+        <div class="card" style="margin-top:12px">
+          <div style="font-weight:800">Tips</div>
+          <ul style="margin-top:8px;color:var(--muted);padding-left:18px">
+            <li>Use arrow keys for games with movement.</li>
+            <li>Click targets in Aim Trainer — try the streak mode.</li>
+            <li>2048 uses swipe/arrow controls.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
 
 <script>
-function loadGame(id) {
-  const title = document.getElementById('gameTitle');
-  const area = document.getElementById('gameArea');
-  area.innerHTML = '';
-  if (id === 'aim') {
-    title.textContent = 'Aim Trainer';
-    aimTrainer(area);
-  } else if (id === 'guess') {
-    title.textContent = 'Number Guess';
-    numberGuess(area);
-  } else if (id === 'breakout') {
-    title.textContent = 'Brick Breaker';
-    breakout(area);
-  } else if (id === 'asteroid') {
-    title.textContent = 'Asteroid Dodger';
-    asteroid(area);
-  } else if (id === '2048') {
-    title.textContent = '2048';
-    game2048(area);
-  } else if (id === 'tictactoe') {
-    title.textContent = 'Tic Tac Toe';
-    ticTacToe(area);
-  } else if (id === 'memory') {
-    title.textContent = 'Memory Match';
-    memoryGame(area);
-  } else if (id === 'reaction') {
-    title.textContent = 'Reaction Timer';
-    reactionGame(area);
-  } else if (id === 'snake') {
-    title.textContent = 'Snake';
-    snakeGame(area);
+/* ===================== Games registry and UI glue ===================== */
+const GAMES = [
+  { id:'aim', name:'Aim Trainer', fn:gameAim, desc:'Click moving targets; streak and timed modes' },
+  { id:'snake', name:'Snake (Modern)', fn:gameSnake, desc:'Smooth controls, walls or wrap mode' },
+  { id:'breakout', name:'Brick Breaker', fn:gameBreakout, desc:'Paddle, ball, multiple levels' },
+  { id:'asteroid', name:'Asteroid Dodger', fn:gameAsteroid, desc:'Dodge falling asteroids, get high score' },
+  { id:'2048', name:'2048', fn:game2048, desc:'Classic sliding puzzle' },
+  { id:'tictac', name:'Tic Tac Toe (AI)', fn:gameTicTacToe, desc:'Smart AI, quick matches' },
+  { id:'memory', name:'Memory Match', fn:gameMemory, desc:'Animated cards, timed rounds' },
+  { id:'reaction', name:'Reaction Timer', fn:gameReaction, desc:'Measure reaction time with stats' },
+  { id:'guess', name:'Number Guess', fn:gameNumberGuess, desc:'Classic higher/lower with history' }
+];
+
+const gamesListEl = document.getElementById('gamesList');
+const stageBody = document.getElementById('stageBody');
+const stageTitle = document.getElementById('stageTitle');
+const mainTitle = document.getElementById('mainTitle');
+const leaderboardEl = document.getElementById('leaderboard');
+const statusBadge = document.getElementById('statusBadge');
+let activeGameId = null;
+
+/* build game buttons */
+function buildGameButtons(){
+  gamesListEl.innerHTML = '';
+  for(const g of GAMES){
+    const b = document.createElement('button');
+    b.className = 'btn';
+    b.innerHTML = `<div style="flex:1;text-align:left">${g.name}<div style="font-size:11px;color:var(--muted);margin-top:4px">${g.desc}</div></div>
+                   <div class="badge" style="font-size:11px">Play</div>`;
+    b.onclick = ()=>launchGame(g.id);
+    gamesListEl.appendChild(b);
   }
 }
+buildGameButtons();
 
-/* === GAMES === */
-// --- 1. AIM TRAINER ---
-function aimTrainer(container){
-  const canvas=document.createElement('canvas');
-  canvas.width=400; canvas.height=400; container.appendChild(canvas);
-  const ctx=canvas.getContext('2d');
-  let score=0,target={x:200,y:200,r:20},start=Date.now(),time=30;
-  function draw(){
-    ctx.clearRect(0,0,400,400);
-    ctx.fillStyle='#ff2a2a'; ctx.beginPath(); ctx.arc(target.x,target.y,target.r,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#00ffff'; ctx.fillText('Score:'+score,10,20);
-    ctx.fillText('Time:'+Math.max(0,(time-(Date.now()-start)/1000)).toFixed(1),320,20);
-  }
-  function newTarget(){ target.x=Math.random()*360+20; target.y=Math.random()*360+20; draw(); }
-  canvas.addEventListener('click',e=>{
-    const rect=canvas.getBoundingClientRect();
-    const x=e.clientX-rect.left,y=e.clientY-rect.top;
-    if(Math.hypot(x-target.x,y-target.y)<target.r){ score++; newTarget(); }
+/* search filter */
+document.getElementById('searchGames').addEventListener('input', (e)=>{
+  const q = e.target.value.toLowerCase();
+  Array.from(gamesListEl.children).forEach(btn=>{
+    btn.style.display = (!q || btn.textContent.toLowerCase().includes(q)) ? '' : 'none';
   });
-  let interval=setInterval(()=>{
-    if((Date.now()-start)/1000>=time){ clearInterval(interval); ctx.fillText('Game Over! Final:'+score,120,200);}
-    else draw();
-  },50);
-  draw();
+});
+
+/* Leaderboard local storage helpers */
+function saveScore(gameId, score){
+  const key = 'arcade_scores_v1';
+  const data = JSON.parse(localStorage.getItem(key) || '{}');
+  data[gameId] = data[gameId] || [];
+  data[gameId].push({score:score, at:Date.now()});
+  data[gameId].sort((a,b)=>b.score-a.score);
+  data[gameId] = data[gameId].slice(0,8);
+  localStorage.setItem(key, JSON.stringify(data));
+  renderLeaderboard();
+}
+function getScores(){
+  const data = JSON.parse(localStorage.getItem('arcade_scores_v1') || '{}');
+  return data;
+}
+function renderLeaderboard(){
+  const data = getScores();
+  leaderboardEl.innerHTML = '';
+  for(const g of GAMES){
+    const list = data[g.id] || [];
+    const card = document.createElement('div');
+    card.style.marginBottom='8px';
+    card.innerHTML = `<div style="display:flex;justify-content:space-between"><strong>${g.name}</strong><span class="smallMuted">${list.length?list[0].score:'-'}</span></div>`;
+    leaderboardEl.appendChild(card);
+  }
+}
+renderLeaderboard();
+
+/* settings / scoreboard simple */
+function openSettings(){
+  alert('Settings: Silent mode enabled. No extra settings in this build.');
+}
+function showScores(){ alert(JSON.stringify(getScores(), null, 2)); }
+
+/* Launch a game */
+function launchGame(id){
+  activeGameId = id;
+  document.querySelectorAll('.btn').forEach(b=>b.classList.remove('active'));
+  // find matching button and highlight
+  Array.from(gamesListEl.children).forEach(btn=>{
+    if(btn.textContent.toLowerCase().includes(id)) btn.classList.add('active');
+  });
+
+  const game = GAMES.find(g=>g.id===id);
+  stageTitle.textContent = game.name;
+  mainTitle.textContent = `Play — ${game.name}`;
+  stageBody.innerHTML = '';
+  try{
+    game.fn(stageBody, saveScore);
+    statusBadge.textContent = 'Playing: ' + game.name;
+  }catch(err){
+    stageBody.innerHTML = '<div class="center"><div style="color:var(--accent2);font-weight:800">Error launching game</div><pre style="color:var(--muted)">'+err.toString()+'</pre></div>';
+    statusBadge.textContent = 'Error';
+  }
 }
 
-// --- 2. NUMBER GUESS ---
-function numberGuess(container){
-  const n=Math.floor(Math.random()*100)+1;
-  let tries=0;
-  const input=document.createElement('input');
-  const btn=document.createElement('button'); btn.textContent='Guess';
-  const out=document.createElement('p');
-  container.append('Guess a number 1–100:',input,btn,out);
-  btn.onclick=()=>{
-    tries++; const val=parseInt(input.value);
-    if(val===n) out.textContent='🎯 Correct! '+tries+' tries.';
-    else if(val<n) out.textContent='Higher!';
-    else out.textContent='Lower!';
-  };
-}
+/* ===================== Individual Games (improved) ===================== */
 
-// --- 3. BRICK BREAKER ---
-function breakout(container){
-  const c=document.createElement('canvas'); c.width=400; c.height=400; container.appendChild(c);
-  const ctx=c.getContext('2d');
-  let ball={x:200,y:300,dx:2,dy:-2,r:8},paddle={x:160,w:80,h:10},bricks=[];
-  for(let r=0;r<3;r++) for(let c2=0;c2<5;c2++) bricks.push({x:40+c2*70,y:40+r*25,alive:true});
-  document.addEventListener('mousemove',e=>{let r=c.getBoundingClientRect();paddle.x=e.clientX-r.left-paddle.w/2;});
+/* ----- 1) AIM TRAINER (streak, timed, multiple target sizes) ----- */
+function gameAim(container, saveFn){
+  container.innerHTML = '';
+  const wrapper = document.createElement('div'); wrapper.style.width='720px'; wrapper.style.maxWidth='100%';
+  const infoBar = document.createElement('div'); infoBar.style.display='flex'; infoBar.style.justifyContent='space-between';
+  const modeSel = document.createElement('select');
+  modeSel.innerHTML = '<option value="30">Timed 30s</option><option value="60">Timed 60s</option><option value="streak">Streak (3 lives)</option>';
+  const restartBtn = document.createElement('button'); restartBtn.className='btn'; restartBtn.textContent='Start';
+  const scoreEl = document.createElement('div'); scoreEl.className='smallMuted'; scoreEl.textContent='Score: 0';
+  infoBar.append(modeSel, restartBtn, scoreEl);
+  const canvas = document.createElement('canvas'); canvas.width=720; canvas.height=420; canvas.style.maxWidth='100%';
+  wrapper.append(infoBar, canvas);
+  container.appendChild(wrapper);
+  const ctx = canvas.getContext('2d');
+  let score=0, lives=3, running=false, mode='30', startAt=0, target=null, timerId=null, streak=false, bestStreak=0;
+  function placeTarget(){
+    const r = Math.max(10, 28 - Math.min(18, Math.floor(score/6))); // smaller as score up
+    target = {x: Math.random()*(canvas.width-2*r)+r, y: Math.random()*(canvas.height-2*r)+r, r};
+  }
   function draw(){
-    ctx.clearRect(0,0,400,400);
-    ctx.fillStyle='#00ffff'; ctx.fillRect(paddle.x,380,paddle.w,paddle.h);
-    ctx.fillStyle='#ff2a2a'; ctx.beginPath(); ctx.arc(ball.x,ball.y,ball.r,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle='#ccc'; bricks.forEach(b=>{if(b.alive)ctx.fillRect(b.x,b.y,60,15);});
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    // grid
+    ctx.fillStyle='rgba(255,255,255,0.02)';
+    for(let x=40;x<canvas.width;x+=40) ctx.fillRect(x,0,1,canvas.height);
+    // target
+    if(target){
+      // glow
+      ctx.beginPath();
+      ctx.fillStyle='rgba(255,42,42,0.12)';
+      ctx.arc(target.x,target.y,target.r+12,0,Math.PI*2); ctx.fill();
+      ctx.beginPath();
+      ctx.fillStyle='rgba(0,229,255,0.12)';
+      ctx.arc(target.x,target.y,target.r+20,0,Math.PI*2); ctx.fill();
+      ctx.beginPath();
+      ctx.fillStyle= '--';
+      ctx.fillStyle='rgba(255,42,42,1)';
+      ctx.arc(target.x,target.y,target.r,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle='rgba(0,0,0,0.2)'; ctx.lineWidth=2; ctx.stroke();
+    }
+    // HUD
+    ctx.fillStyle='#cfeff6'; ctx.font='16px monospace';
+    const timeLeft = mode==='streak' ? `Lives: ${lives}` : `Time: ${Math.max(0,(mode - ((Date.now()-startAt)/1000))).toFixed(1)}s`;
+    ctx.fillText('Score: '+score, 12, 20);
+    ctx.fillText(timeLeft, 12, 40);
+  }
+  function tick(){
+    draw();
+    if(mode!=='streak'){
+      const secs = (Date.now()-startAt)/1000;
+      if(secs >= Number(mode)){ end(false); return; }
+    } else {
+      if(lives<=0){ end(false); return; }
+    }
+    timerId = requestAnimationFrame(tick);
+  }
+  function start(){
+    score=0; lives=3; startAt=Date.now(); mode=modeSel.value; placeTarget(); running=true; cancelAnimationFrame(timerId); timerId=requestAnimationFrame(tick);
+  }
+  function end(won){
+    running=false; cancelAnimationFrame(timerId);
+    if(saveFn && typeof saveFn==='function') saveFn('aim', score);
+    // show finish overlay
+    const overlay = document.createElement('div'); overlay.style.position='absolute'; overlay.style.inset='0'; overlay.style.display='flex'; overlay.style.alignItems='center'; overlay.style.justifyContent='center';
+    overlay.innerHTML = `<div style="background:linear-gradient(180deg,#071216,#071116);padding:18px;border-radius:12px;border:1px solid rgba(255,255,255,0.04);text-align:center">
+      <div style="font-weight:800;color:${won? 'var(--accent1)':'var(--accent2)'};font-size:20px">${won? 'Done!' : 'Finished'}</div>
+      <div style="margin-top:8px;color:var(--muted)">Score: ${score}</div>
+      <div style="margin-top:12px"><button class="btn" id="closeAim">Close</button></div>
+    </div>`;
+    container.appendChild(overlay);
+    document.getElementById('closeAim').onclick = ()=>overlay.remove();
+  }
+
+  canvas.addEventListener('click', (ev)=>{
+    if(!running) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = ev.clientX - rect.left, y = ev.clientY - rect.top;
+    if(target && Math.hypot(x-target.x,y-target.y) <= target.r){
+      score++;
+      if(mode === 'streak') { /* keep same */ }
+      placeTarget();
+    } else {
+      if(mode === 'streak'){ lives--; }
+    }
+  });
+
+  restartBtn.onclick = ()=>start();
+  draw(); placeTarget();
+}
+
+/* ----- 2) SNAKE (improved) ----- */
+function gameSnake(container, saveFn){
+  container.innerHTML='';
+  const canvas = document.createElement('canvas'); canvas.width=640; canvas.height=360; canvas.style.maxWidth='100%';
+  container.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  const cols = 32, rows = 18;
+  const cellW = canvas.width/cols, cellH = canvas.height/rows;
+  let snake = [{x:8,y:9},{x:7,y:9},{x:6,y:9}], dir={x:1,y:0}, food=null, running=true, speed=80, score=0, lastTick=0;
+  function placeFood(){
+    let p;
+    do { p = {x:Math.floor(Math.random()*cols), y:Math.floor(Math.random()*rows)}; }
+    while(snake.some(s=>s.x===p.x && s.y===p.y));
+    food=p;
+  }
+  function draw(){
+    ctx.fillStyle='#020506'; ctx.fillRect(0,0,canvas.width,canvas.height);
+    // draw food
+    if(food){ ctx.fillStyle='#ff2a2a'; ctx.fillRect(food.x*cellW+2, food.y*cellH+2, cellW-4, cellH-4); }
+    // draw snake
+    snake.forEach((s,i)=>{
+      ctx.fillStyle = i===0 ? '#00e5ff' : '#6fe9ff';
+      ctx.fillRect(s.x*cellW+1, s.y*cellH+1, cellW-2, cellH-2);
+    });
+    ctx.fillStyle='white'; ctx.font='14px monospace'; ctx.fillText('Score: '+score, 8, 16);
+  }
+  function step(){
+    const head = {x:snake[0].x + dir.x, y:snake[0].y + dir.y};
+    // wrap edges
+    head.x = (head.x + cols) % cols; head.y = (head.y + rows) % rows;
+    if(snake.some(s=>s.x===head.x && s.y===head.y)){ // hit self
+      running=false; saveAndEnd(); return;
+    }
+    snake.unshift(head);
+    if(food && head.x===food.x && head.y===food.y){
+      score += 10; placeFood();
+    } else {
+      snake.pop();
+    }
+  }
+  function saveAndEnd(){
+    if(saveFn) saveFn('snake', score);
+    // show simple overlay
+    const ov = document.createElement('div'); ov.style.position='absolute'; ov.style.inset='0'; ov.style.display='flex'; ov.style.justifyContent='center'; ov.style.alignItems='center';
+    ov.innerHTML = `<div style="background:linear-gradient(180deg,#071617,#071218);padding:18px;border-radius:12px;color:var(--muted)">
+      <div style="font-size:20px;color:var(--accent2);font-weight:800">Game Over</div>
+      <div style="margin-top:8px">Score: ${score}</div>
+      <div style="margin-top:12px"><button class="btn" id="retrySnake">Retry</button></div>
+    </div>`;
+    container.appendChild(ov);
+    document.getElementById('retrySnake').onclick = ()=>{ov.remove(); restart();};
+  }
+  function restart(){ snake = [{x:8,y:9},{x:7,y:9},{x:6,y:9}]; dir={x:1,y:0}; score=0; running=true; placeFood(); }
+  function loop(ts){
+    if(!lastTick) lastTick = ts;
+    if(ts - lastTick > speed){
+      if(running) step();
+      draw();
+      lastTick = ts;
+    }
+    if(running) requestAnimationFrame(loop);
+  }
+  window.addEventListener('keydown',(e)=>{
+    if(e.key.includes('Arrow')){
+      if(e.key==='ArrowUp' && dir.y!==1) dir={x:0,y:-1};
+      if(e.key==='ArrowDown' && dir.y!==-1) dir={x:0,y:1};
+      if(e.key==='ArrowLeft' && dir.x!==1) dir={x:-1,y:0};
+      if(e.key==='ArrowRight' && dir.x!==-1) dir={x:1,y:0};
+    }
+  });
+  placeFood(); draw(); requestAnimationFrame(loop);
+}
+
+/* ----- 3) BREAKOUT (improved: multiple rows, lives, levels) ----- */
+function gameBreakout(container, saveFn){
+  container.innerHTML='';
+  const canvas = document.createElement('canvas'); canvas.width=640; canvas.height=420; canvas.style.maxWidth='100%';
+  container.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  let paddle = {x: (canvas.width-120)/2, w:120, h:12}, ball={x:canvas.width/2,y:canvas.height-80,dx:5,dy:-5,r:8}, bricks=[], rows=4, cols=8, lives=3, score=0;
+  function buildBricks(){
+    bricks = [];
+    const pad = 12;
+    const bw = (canvas.width - pad*(cols+1))/cols, bh = 18;
+    for(let r=0;r<rows;r++){
+      for(let c=0;c<cols;c++){
+        bricks.push({x: pad + c*(bw+pad), y: 40 + r*(bh+8), w:bw, h:bh, alive:true, hits:1});
+      }
+    }
+  }
+  function draw(){
+    ctx.fillStyle='#000'; ctx.fillRect(0,0,canvas.width,canvas.height);
+    // paddle
+    ctx.fillStyle='#00e5ff'; ctx.fillRect(paddle.x, canvas.height - paddle.h - 20, paddle.w, paddle.h);
+    // ball
+    ctx.fillStyle='#ff2a2a'; ctx.beginPath(); ctx.arc(ball.x, ball.y, ball.r,0,Math.PI*2); ctx.fill();
+    // bricks
+    bricks.forEach(b=>{ if(b.alive){ ctx.fillStyle = '#6fe9ff'; ctx.fillRect(b.x, b.y, b.w, b.h); }});
+    ctx.fillStyle='white'; ctx.font='14px monospace'; ctx.fillText('Score:'+score+'  Lives:'+lives, 10, 18);
   }
   function update(){
-    ball.x+=ball.dx; ball.y+=ball.dy;
-    if(ball.x<ball.r||ball.x>400-ball.r) ball.dx*=-1;
-    if(ball.y<ball.r) ball.dy*=-1;
-    if(ball.y>400-ball.r){
-      ctx.fillText('Game Over',160,200);
-      return;
-    }
-    if(ball.y>370&&ball.x>paddle.x&&ball.x<paddle.x+paddle.w) ball.dy=-Math.abs(ball.dy);
-    bricks.forEach(b=>{
-      if(b.alive && ball.x>b.x&&ball.x<b.x+60&&ball.y>b.y&&ball.y<b.y+15){
-        ball.dy*=-1; b.alive=false;
+    ball.x += ball.dx; ball.y += ball.dy;
+    if(ball.x < ball.r || ball.x > canvas.width-ball.r) ball.dx *= -1;
+    if(ball.y < ball.r) ball.dy *= -1;
+    if(ball.y > canvas.height - ball.r - 10){
+      // check paddle hit
+      if(ball.x > paddle.x && ball.x < paddle.x + paddle.w){
+        ball.dy = -Math.abs(ball.dy);
+        // modify dx by where it hit the paddle
+        const hitPos = (ball.x - (paddle.x + paddle.w/2)) / (paddle.w/2);
+        ball.dx += hitPos * 2;
+      } else {
+        lives--;
+        if(lives<=0){ endGame(); return; }
+        ball.x = canvas.width/2; ball.y = canvas.height-80; ball.dx = 5*(Math.random()>0.5?1:-1); ball.dy = -5;
       }
-    });
-    draw(); requestAnimationFrame(update);
+    }
+    // brick collisions
+    for(const b of bricks){
+      if(b.alive && ball.x > b.x && ball.x < b.x + b.w && ball.y - ball.r < b.y + b.h && ball.y + ball.r > b.y){
+        b.alive=false; ball.dy*=-1; score += 10; break;
+      }
+    }
+    // win condition
+    if(bricks.every(b=>!b.alive)){ // next level
+      rows = Math.min(6, rows+1);
+      buildBricks();
+      ball.x = canvas.width/2; ball.y = canvas.height-80; ball.dx *= 1.08; ball.dy = -Math.abs(ball.dy)*1.02;
+    }
+    draw();
+    requestAnimationFrame(update);
   }
-  update();
+  function endGame(){
+    if(saveFn) saveFn('breakout', score);
+    const ov = document.createElement('div'); ov.style.position='absolute'; ov.style.inset='0'; ov.style.display='flex'; ov.style.justifyContent='center'; ov.style.alignItems='center';
+    ov.innerHTML = `<div style="background:linear-gradient(180deg,#071617,#071218);padding:18px;border-radius:12px;color:var(--muted)">
+      <div style="font-size:20px;color:var(--accent2);font-weight:800">Game Over</div>
+      <div style="margin-top:8px">Score: ${score}</div>
+      <div style="margin-top:12px"><button class="btn" id="retryBr">Retry</button></div>
+    </div>`;
+    container.appendChild(ov);
+    document.getElementById('retryBr').onclick = ()=>{ ov.remove(); restart(); };
+  }
+  function restart(){
+    paddle.x = (canvas.width-120)/2; ball.x = canvas.width/2; ball.y = canvas.height-80; ball.dx = 5*(Math.random()>0.5?1:-1); ball.dy=-5; rows = 4; lives = 3; score=0; buildBricks();
+  }
+  canvas.addEventListener('mousemove',(e)=>{ const r=canvas.getBoundingClientRect(); paddle.x = Math.max(10, Math.min(canvas.width - paddle.w - 10, e.clientX - r.left - paddle.w/2)); });
+  restart(); update();
 }
 
-// --- 4. ASTEROID DODGER ---
-function asteroid(container){
-  const c=document.createElement('canvas'); c.width=400; c.height=400; container.appendChild(c);
-  const ctx=c.getContext('2d');
-  let ship={x:200,y:360},asteroids=[],score=0,alive=true;
-  document.addEventListener('keydown',e=>{
-    if(e.key==='ArrowLeft')ship.x-=20;
-    if(e.key==='ArrowRight')ship.x+=20;
-  });
+/* ----- 4) ASTEROID DODGER ----- */
+function gameAsteroid(container, saveFn){
+  container.innerHTML='';
+  const canvas = document.createElement('canvas'); canvas.width=680; canvas.height=420; canvas.style.maxWidth='100%';
+  container.appendChild(canvas);
+  const ctx = canvas.getContext('2d');
+  let ship = {x:canvas.width/2, y:canvas.height-60, w:28, h:18}, asts=[], spawn=0, score=0, alive=true;
+  window.addEventListener('keydown',(e)=>{ if(e.key==='ArrowLeft') ship.x -= 28; if(e.key==='ArrowRight') ship.x += 28; });
   function loop(){
-    if(!alive)return;
-    if(Math.random()<0.05)asteroids.push({x:Math.random()*380,y:0});
-    ctx.clearRect(0,0,400,400);
-    ctx.fillStyle='#00ffff'; ctx.fillRect(ship.x-10,ship.y,20,20);
-    ctx.fillStyle='#ff2a2a';
-    for(let a of asteroids){
-      a.y+=3; ctx.fillRect(a.x,a.y,10,10);
-      if(Math.abs(a.x-ship.x)<15 && Math.abs(a.y-ship.y)<15){alive=false;}
-    }
-    ctx.fillText('Score:'+score,10,20);
-    if(alive){score++; requestAnimationFrame(loop);}
-    else ctx.fillText('Game Over',150,200);
+    if(!alive) return;
+    ctx.fillStyle='#000'; ctx.fillRect(0,0,canvas.width,canvas.height);
+    if(Math.random() < 0.03 + Math.min(0.25, score/2000)) asts.push({x:Math.random()*(canvas.width-20), y:-20, s:Math.random()*2+1});
+    for(const a of asts){ a.y += 2 + a.s; ctx.fillStyle='#ff2a2a'; ctx.fillRect(a.x, a.y, 12+Math.floor(a.s*6), 12+Math.floor(a.s*6)); }
+    // ship
+    ship.x = Math.max(10, Math.min(canvas.width-10-ship.w, ship.x));
+    ctx.fillStyle='#00e5ff'; ctx.fillRect(ship.x, ship.y, ship.w, ship.h);
+    // detect collisions
+    for(const a of asts){ if(a.y + 20 > ship.y && a.x < ship.x + ship.w && a.x+20 > ship.x){ alive=false; break; } }
+    score++;
+    ctx.fillStyle='white'; ctx.font='14px monospace'; ctx.fillText('Score: '+score, 10, 18);
+    // cull asteroids
+    for(let i=asts.length-1;i>=0;i--) if(asts[i].y > canvas.height+40) asts.splice(i,1);
+    if(alive) requestAnimationFrame(loop); else end();
   }
+  function end(){ if(saveFn) saveFn('asteroid', score); const ov=document.createElement('div'); ov.style.position='absolute'; ov.style.inset='0'; ov.style.display='flex'; ov.style.alignItems='center'; ov.style.justifyContent='center'; ov.innerHTML = `<div style="background:#071218;padding:18px;border-radius:12px;color:var(--muted)"><div style="font-weight:800;color:var(--accent2)">Crashed</div><div style="margin-top:8px">Score: ${score}</div><div style="margin-top:12px"><button class="btn" id="retryAst">Retry</button></div></div>`; container.appendChild(ov); document.getElementById('retryAst').onclick=()=>{ov.remove(); asts=[]; score=0; alive=true; ship.x=canvas.width/2; loop();}; }
   loop();
 }
 
-// --- 5. 2048 (simplified) ---
-function game2048(container){
-  const grid=[[0,0,0,0],[0,0,0,0],[0,0,0,0],[0,0,0,0]];
-  const div=document.createElement('div');
-  div.style.display='grid'; div.style.gridTemplate='repeat(4,60px)/repeat(4,60px)';
-  div.style.gap='5px';
+/* ----- 5) 2048 (fully playable) ----- */
+function game2048(container, saveFn){
+  container.innerHTML='';
+  const boardSize = 4;
+  let grid = Array.from({length:boardSize},()=>Array(boardSize).fill(0));
+  const wrapper = document.createElement('div'); wrapper.style.display='grid'; wrapper.style.gridTemplateColumns='1fr 140px'; wrapper.style.gap='12px';
+  const boardEl = document.createElement('div'); boardEl.style.width='360px';
+  boardEl.style.display='grid'; boardEl.style.gridTemplateColumns = `repeat(${boardSize}, 1fr)`; boardEl.style.gap='8px';
+  const sideEl = document.createElement('div');
+  sideEl.innerHTML = `<div style="font-weight:800">2048</div><div class="smallMuted" style="margin-top:8px">Use arrows or swipe</div><div style="margin-top:12px"><button class="btn" id="new2048">New</button></div>`;
+  wrapper.append(boardEl, sideEl);
+  container.appendChild(wrapper);
   function render(){
-    div.innerHTML='';
-    grid.flat().forEach(v=>{
-      const c=document.createElement('div');
-      c.style.background=v? '#ff2a2a':'#222';
-      c.style.color='#fff'; c.style.textAlign='center'; c.style.lineHeight='60px';
-      c.textContent=v||''; div.appendChild(c);
-    });
+    boardEl.innerHTML='';
+    for(let r=0;r<boardSize;r++){
+      for(let c=0;c<boardSize;c++){
+        const v = grid[r][c];
+        const tile = document.createElement('div');
+        tile.style.height='72px'; tile.style.borderRadius='8px'; tile.style.display='flex'; tile.style.alignItems='center'; tile.style.justifyContent='center';
+        tile.style.fontWeight='800'; tile.style.fontSize='20px';
+        tile.style.background = v ? (v>=1024 ? '#ff2a2a' : '#00e5ff') : 'rgba(255,255,255,0.03)';
+        tile.textContent = v || '';
+        boardEl.appendChild(tile);
+      }
+    }
   }
   function addTile(){
     const empties=[];
-    for(let i=0;i<4;i++)for(let j=0;j<4;j++)if(!grid[i][j])empties.push([i,j]);
-    if(empties.length){let [i,j]=empties[Math.floor(Math.random()*empties.length)]; grid[i][j]=2;}
+    for(let r=0;r<boardSize;r++) for(let c=0;c<boardSize;c++) if(!grid[r][c]) empties.push([r,c]);
+    if(!empties.length) return false;
+    const [r,c] = empties[Math.floor(Math.random()*empties.length)];
+    grid[r][c] = Math.random()<0.9 ? 2 : 4;
+    return true;
   }
-  function move(dir){
-    const rotate=(n)=>{for(let i=0;i<n;i++)grid.push(grid.shift());};
-    let moved=false;
-    for(let i=0;i<4;i++){
-      let row=grid[i].filter(v=>v);
-      for(let j=0;j<row.length-1;j++)if(row[j]===row[j+1]){row[j]*=2;row.splice(j+1,1);}
-      while(row.length<4)row.push(0);
-      if(grid[i].join()!=row.join()){grid[i]=row;moved=true;}
+  function slide(row){
+    const arr = row.filter(v=>v); for(let i=0;i<arr.length-1;i++) if(arr[i]===arr[i+1]){ arr[i]*=2; arr.splice(i+1,1); }
+    while(arr.length<boardSize) arr.push(0);
+    return arr;
+  }
+  function move(direction){
+    let rotated=false, moved=false;
+    for(let i=0;i< (direction==='left' || direction==='right' ? 1:0); i++){} // noop
+    if(direction==='left'){
+      for(let r=0;r<boardSize;r++){
+        const newRow = slide(grid[r]);
+        if(newRow.join()!=grid[r].join()){ moved=true; grid[r]=newRow; }
+      }
+    } else if(direction==='right'){
+      for(let r=0;r<boardSize;r++){
+        const reversed = grid[r].slice().reverse();
+        const newRow = slide(reversed).reverse();
+        if(newRow.join()!=grid[r].join()){ moved=true; grid[r]=newRow; }
+      }
+    } else if(direction==='up'){
+      for(let c=0;c<boardSize;c++){
+        let col = []; for(let r=0;r<boardSize;r++) col.push(grid[r][c]);
+        const newCol = slide(col);
+        for(let r=0;r<boardSize;r++){ if(grid[r][c]!=newCol[r]) moved=true; grid[r][c]=newCol[r]; }
+      }
+    } else if(direction==='down'){
+      for(let c=0;c<boardSize;c++){
+        let col = []; for(let r=0;r<boardSize;r++) col.push(grid[r][c]);
+        const newCol = slide(col.reverse()).reverse();
+        for(let r=0;r<boardSize;r++){ if(grid[r][c]!=newCol[r]) moved=true; grid[r][c]=newCol[r]; }
+      }
     }
-    if(moved)addTile(); render();
+    if(moved){ addTile(); render(); checkGameOver(); }
   }
-  document.addEventListener('keydown',e=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown'].includes(e.key))move(e.key);});
-  addTile(); addTile(); render(); container.append(div);
+  function checkGameOver(){
+    const flat = grid.flat();
+    if(flat.includes(2048)){ if(saveFn) saveFn('2048', Math.max(...flat)); alert('You reached 2048!'); }
+    if(!flat.includes(0)){
+      // no spaces, test if any merges possible
+      for(let r=0;r<boardSize;r++) for(let c=0;c<boardSize-1;c++) if(grid[r][c]===grid[r][c+1]) return;
+      for(let c=0;c<boardSize;c++) for(let r=0;r<boardSize-1;r++) if(grid[r][c]===grid[r+1][c]) return;
+      if(saveFn) saveFn('2048', Math.max(...flat));
+      alert('Game over');
+    }
+  }
+  document.getElementById('new2048').onclick = ()=>{ grid = Array.from({length:boardSize},()=>Array(boardSize).fill(0)); addTile(); addTile(); render(); };
+  window.addEventListener('keydown',(e)=>{ if(e.key.includes('Arrow')){ e.preventDefault(); const dir = e.key.replace('Arrow','').toLowerCase(); move(dir); }});
+  // simple touch swipe
+  let sx=0, sy=0;
+  boardEl.addEventListener('touchstart', (e)=>{ sx=e.touches[0].clientX; sy=e.touches[0].clientY;});
+  boardEl.addEventListener('touchend', (e)=>{ const dx=e.changedTouches[0].clientX-sx, dy=e.changedTouches[0].clientY-sy; if(Math.abs(dx)>Math.abs(dy)){ if(dx>20) move('right'); else if(dx<-20) move('left'); }else{ if(dy>20) move('down'); else if(dy<-20) move('up'); }});
+  grid = Array.from({length:boardSize},()=>Array(boardSize).fill(0)); addTile(); addTile(); render();
 }
 
-// --- 6. TIC TAC TOE ---
-function ticTacToe(container){
-  const board=['','','','','','','','',''];
-  const div=document.createElement('div');
-  div.style.display='grid'; div.style.gridTemplate='repeat(3,80px)/repeat(3,80px)'; div.style.gap='5px';
+/* ----- 6) TICTACTOE (minimax AI for fun) ----- */
+function gameTicTacToe(container, saveFn){
+  container.innerHTML='';
+  const grid = Array(9).fill(null);
+  const wrapper = document.createElement('div'); wrapper.style.display='grid'; wrapper.style.gridTemplateColumns='repeat(3,110px)'; wrapper.style.gap='8px';
+  container.appendChild(wrapper);
+  const status = document.createElement('div'); status.className='smallMuted'; status.style.marginTop='12px';
+  container.appendChild(status);
+  let human = 'X', ai = 'O', turn = 'X', over=false;
   function render(){
-    div.innerHTML='';
-    board.forEach((v,i)=>{
-      const c=document.createElement('div');
-      c.style.background='#222'; c.style.display='flex'; c.style.alignItems='center'; c.style.justifyContent='center';
-      c.style.fontSize='2em'; c.style.cursor='pointer';
-      c.textContent=v;
-      c.onclick=()=>{ if(!v && !winner()){board[i]='X'; aiMove(); render();} };
-      div.appendChild(c);
-    });
+    wrapper.innerHTML='';
+    for(let i=0;i<9;i++){
+      const b = document.createElement('div'); b.style.height='110px'; b.style.display='flex'; b.style.alignItems='center'; b.style.justifyContent='center';
+      b.style.background = grid[i] ? (grid[i]==='X' ? '#00e5ff' : '#ff2a2a') : 'rgba(255,255,255,0.02)'; b.style.fontSize='36px'; b.style.fontWeight='800'; b.style.cursor = grid[i]||over ? 'default' : 'pointer';
+      b.textContent = grid[i] || '';
+      b.onclick = ()=>{ if(over || grid[i]) return; grid[i]=human; if(checkWin(grid, human)){ over=true; status.textContent='You win!'; if(saveFn) saveFn('tictac', 1); render(); return; } aiMove(); render(); };
+      wrapper.appendChild(b);
+    }
   }
-  function winner(){
-    const wins=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-    for(let w of wins){let[a,b,c]=w;if(board[a]&&board[a]==board[b]&&board[a]==board[c])return board[a];}
+  function checkWin(b, p){
+    const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+    for(const w of wins) if(b[w[0]]===p && b[w[1]]===p && b[w[2]]===p) return true;
+    return false;
   }
   function aiMove(){
-    let empty=board.map((v,i)=>v?null:i).filter(v=>v!==null);
-    if(empty.length)board[empty[Math.floor(Math.random()*empty.length)]]='O';
+    // minimax small depth enough
+    const move = minimax(grid.slice(), ai).index;
+    if(move!==undefined) grid[move]=ai;
+    if(checkWin(grid, ai)){ over=true; status.textContent='CPU wins'; if(saveFn) saveFn('tictac', -1); return; }
+    if(grid.every(Boolean)){ over=true; status.textContent='Draw'; return; }
   }
-  render(); container.append(div);
+  function minimax(board, player){
+    const avail = board.map((v,i)=>v?null:i).filter(v=>v!==null);
+    if(checkWin(board, human)) return {score: -10};
+    if(checkWin(board, ai)) return {score: 10};
+    if(avail.length===0) return {score:0};
+    const moves = [];
+    for(const i of avail){
+      const newBoard = board.slice(); newBoard[i] = player;
+      const result = minimax(newBoard, player===ai?human:ai);
+      moves.push({index:i, score: result.score});
+    }
+    if(player===ai) return moves.reduce((a,b)=>b.score>a.score?b:a);
+    else return moves.reduce((a,b)=>b.score<a.score?b:a);
+  }
+  render();
 }
 
-// --- 7. MEMORY MATCH ---
-function memoryGame(container){
-  const symbols=['🛰','🚀','🌑','🌌','⭐','🛸'];
-  let cards=[...symbols,...symbols].sort(()=>Math.random()-0.5);
-  let first=null,lock=false,found=0;
-  const grid=document.createElement('div');
-  grid.style.display='grid'; grid.style.gridTemplate='repeat(3,80px)/repeat(4,80px)'; grid.style.gap='5px';
+/* ----- 7) MEMORY MATCH (animated) ----- */
+function gameMemory(container, saveFn){
+  container.innerHTML='';
+  const symbols = ['🔺','🔹','▲','●','✦','★','◆','■'];
+  let cards = shuffle([...symbols,...symbols]);
+  const grid = document.createElement('div'); grid.style.display='grid'; grid.style.gridTemplateColumns='repeat(4,86px)'; grid.style.gap='10px';
+  container.appendChild(grid);
+  let open = [], matched=0, moves=0;
   function render(){
     grid.innerHTML='';
-    cards.forEach((sym,i)=>{
-      const c=document.createElement('div');
-      c.style.background='#111'; c.style.display='flex'; c.style.alignItems='center'; c.style.justifyContent='center';
-      c.style.fontSize='2em'; c.style.cursor='pointer';
-      c.textContent=(first===i||sym==='')?sym:'';
-      c.onclick=()=>{
-        if(lock||sym==='')return;
-        if(first===null){first=i; render();}
-        else{
-          if(cards[first]===sym){cards[first]='';cards[i]='';found+=2;}
-          first=null; lock=true;
-          setTimeout(()=>{lock=false;render();if(found===cards.length)grid.innerHTML='<p>You win!</p>';},600);
-        }
-      };
-      grid.appendChild(c);
+    cards.forEach((c,i)=>{
+      const card = document.createElement('div'); card.style.height='78px'; card.style.borderRadius='8px'; card.style.display='flex'; card.style.alignItems='center'; card.style.justifyContent='center'; card.style.fontSize='28px';
+      card.style.background = open.includes(i) || c==='' ? '#00e5ff' : 'rgba(255,255,255,0.02)';
+      card.textContent = open.includes(i) || c===''? c : '';
+      card.onclick = ()=>{ if(open.includes(i) || c==='') return; open.push(i); if(open.length===2){ moves++; if(cards[open[0]]===cards[open[1]]){ cards[open[0]]=''; cards[open[1]]=''; matched+=2; open=[]; if(matched===cards.length){ if(saveFn) saveFn('memory', 1000-moves); alert('You matched all! Moves:'+moves); } } else { setTimeout(()=>{ open=[]; render(); }, 700); } } render(); };
+      grid.appendChild(card);
     });
   }
-  render(); container.append(grid);
+  render();
 }
 
-// --- 8. REACTION TIMER ---
-function reactionGame(container){
-  const msg=document.createElement('h3'); msg.textContent='Wait for green...';
-  const btn=document.createElement('button'); btn.textContent='Start';
-  container.append(msg,btn);
-  let start=0,timeout;
-  btn.onclick=()=>{
-    btn.disabled=true; msg.style.color='#ff2a2a'; msg.textContent='Wait...';
-    timeout=setTimeout(()=>{
-      msg.style.color='#00ffff'; msg.textContent='Click!';
-      start=Date.now(); btn.disabled=false;
-    },Math.random()*2000+1000);
+/* ----- 8) REACTION TIMER (history + avg) ----- */
+function gameReaction(container, saveFn){
+  container.innerHTML='';
+  let last=0, start=0, times=[];
+  const box = document.createElement('div'); box.style.width='360px'; box.style.height='200px'; box.style.borderRadius='10px'; box.style.display='flex'; box.style.alignItems='center'; box.style.justifyContent='center'; box.style.fontWeight='800'; box.style.fontSize='22px';
+  box.style.background='linear-gradient(180deg,rgba(255,255,255,0.02),transparent)';
+  box.textContent='Click Start';
+  const startBtn = document.createElement('button'); startBtn.className='btn'; startBtn.textContent='Start';
+  const list = document.createElement('div'); list.className='smallMuted'; list.style.marginTop='8px';
+  container.append(box, startBtn, list);
+  startBtn.onclick = ()=>{
+    box.textContent='Wait...'; box.style.background='rgba(255,255,255,0.02)';
+    const delay = Math.random()*2000 + 800;
+    startBtn.disabled = true;
+    setTimeout(()=>{ box.textContent='Now!'; box.style.background='linear-gradient(90deg,var(--accent1),var(--accent2))'; start = performance.now(); }, delay);
   };
-  container.addEventListener('click',()=>{
-    if(start){msg.textContent='Time: '+(Date.now()-start)+'ms'; start=0; clearTimeout(timeout);}
+  box.addEventListener('click', ()=>{
+    if(!start) return;
+    const t = Math.round(performance.now() - start);
+    times.push(t);
+    list.textContent = 'Last: '+t+'ms • Avg: '+Math.round(times.reduce((a,b)=>a+b,0)/times.length)+'ms';
+    start=0; startBtn.disabled=false;
+    if(times.length>=5 && saveFn) saveFn('reaction', Math.round(times.reduce((a,b)=>a+b,0)/times.length));
   });
 }
 
-// --- 9. SNAKE ---
-function snakeGame(container){
-  const c=document.createElement('canvas'); c.width=400; c.height=400; container.appendChild(c);
-  const ctx=c.getContext('2d');
-  let snake=[{x:10,y:10}],dir={x:1,y:0},food={x:15,y:15};
-  document.addEventListener('keydown',e=>{
-    if(e.key==='ArrowUp')dir={x:0,y:-1};
-    if(e.key==='ArrowDown')dir={x:0,y:1};
-    if(e.key==='ArrowLeft')dir={x:-1,y:0};
-    if(e.key==='ArrowRight')dir={x:1,y:0};
-  });
-  function loop(){
-    const head={x:snake[0].x+dir.x,y:snake[0].y+dir.y};
-    if(head.x<0||head.y<0||head.x>19||head.y>19||snake.some(s=>s.x===head.x&&s.y===head.y)){
-      ctx.fillText('Game Over',150,200); return;
-    }
-    snake.unshift(head);
-    if(head.x===food.x&&head.y===food.y){food={x:Math.floor(Math.random()*20),y:Math.floor(Math.random()*20)};}
-    else snake.pop();
-    ctx.clearRect(0,0,400,400);
-    ctx.fillStyle='#00ffff';
-    snake.forEach(s=>ctx.fillRect(s.x*20,s.y*20,18,18));
-    ctx.fillStyle='#ff2a2a'; ctx.fillRect(food.x*20,food.y*20,18,18);
-    requestAnimationFrame(loop);
-  }
-  loop();
+/* ----- 9) NUMBER GUESS (improved) ----- */
+function gameNumberGuess(container, saveFn){
+  container.innerHTML='';
+  const target = Math.floor(Math.random()*100)+1; let tries=0;
+  const input = document.createElement('input'); input.type='number'; input.placeholder='1-100';
+  const btn = document.createElement('button'); btn.className='btn'; btn.textContent='Guess';
+  const out = document.createElement('div'); out.className='smallMuted'; out.style.marginTop='8px';
+  container.append(input, btn, out);
+  btn.onclick = ()=>{
+    const v = Number(input.value); tries++;
+    if(!v || v<1 || v>100) out.textContent='Pick 1–100';
+    else if(v===target){ out.textContent=`✅ Correct in ${tries} tries`; if(saveFn) saveFn('guess', 100 - tries); }
+    else out.textContent = v < target ? 'Higher' : 'Lower';
+  };
 }
+
+/* ===================== Utilities ===================== */
+function shuffle(a){ return a.slice().sort(()=>Math.random()-0.5); }
+
+/* =============== Initialize (launch first game visually) =============== */
+document.addEventListener('DOMContentLoaded', ()=>{
+  // highlight first button visually
+  // auto open aim trainer as demo
+  setTimeout(()=>{ launchGame('aim'); }, 300);
+});
 </script>
 </body>
 </html>
